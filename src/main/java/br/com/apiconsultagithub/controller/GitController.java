@@ -1,5 +1,6 @@
 package br.com.apiconsultagithub.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,26 +26,24 @@ public class GitController {
 	
 	@RequestMapping(value="/consultaTwitter")
 	public ResponseEntity<?> consultaTwitter(@RequestParam("parametro")String parametro) {
-		log.info("Inicio de consulta para o parametro -> "+ parametro + " no dia -> " + System.currentTimeMillis());
+		log.info("Inicio de consulta para o parametro -> "+ parametro + " no dia -> " + new Timestamp(System.currentTimeMillis()));
 		List<ResponseModel> retorno = new ArrayList<>();
 		try {
 			retorno = serviceTwitter.buscarTweet(parametro);
-			System.out.println(retorno);
-			System.out.println(retorno.size());
 			if(retorno.isEmpty()) {
-				log.info("Consulta retornou vazia para o parametro -> " + parametro + " no dia -> " + System.currentTimeMillis());
+				log.info("Consulta retornou vazia para o parametro -> " + parametro + " no dia -> " + new Timestamp(System.currentTimeMillis()));
 				return ResponseEntity.noContent().build();
 			}else {
-				log.info("Fim da consulta para o parametro -> " + parametro + " no dia -> " + System.currentTimeMillis());
+				log.info("Fim da consulta para o parametro -> " + parametro + " no dia -> " + new Timestamp(System.currentTimeMillis()));
 				return ResponseEntity.ok(retorno);
 			}
 			
 		}
 		catch(Exception e) {
 			log.error("Fim da consulta para o parametro -> " + parametro + " no dia -> "
-					+ System.currentTimeMillis() 
+					+ new Timestamp(System.currentTimeMillis())
 					+ " Exception -> " + e.getMessage());
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.status(500).build();
 		}
 	}
 }
